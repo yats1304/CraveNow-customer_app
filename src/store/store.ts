@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import authReducer from "@/features/auth/redux/authSlice";
+
 export const store = configureStore({
   reducer: {
-    // Redux Toolkit requires at least one valid reducer to initialize
-    _dummy: (state = {}) => state,
+    auth: authReducer,
   },
 });
 

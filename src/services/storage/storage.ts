@@ -6,7 +6,7 @@ try {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { MMKV } = require("react-native-mmkv");
   nativeStorage = new MMKV({
-    id: "cavenow-storage",
+    id: "cravenow-storage",
   });
 } catch {
   console.warn(

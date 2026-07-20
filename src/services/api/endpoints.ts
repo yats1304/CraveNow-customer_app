@@ -3,11 +3,15 @@ const AUTH = "/auth";
 export const AUTH_ENDPOINTS = {
   AUTH: {
     LOGIN: `${AUTH}/login`,
-    SIGNUP: `${AUTH}/signup`,
+    GOOGLE_LOGIN: `${AUTH}/google`,
+    SIGNUP: `${AUTH}/register`,
     LOGOUT: `${AUTH}/logout`,
-    REFRESH_TOKEN: `${AUTH}/refresh-token`,
+    REFRESH_TOKEN: `${AUTH}/refresh`,
+    VERIFY_OTP: `${AUTH}/verify-opt`,
+    RESEND_OTP: `${AUTH}/resend-otp`,
     ME: `${AUTH}/me`,
     FORGOT_PASSWORD: `${AUTH}/forgot-password`,
-    RESET_PASSWORD: `${AUTH}/reset-password`,
+    RESET_PASSWORD_OTP: `${AUTH}/reset-password`,
+    CHANGE_PASSWORD: `${AUTH}/change-password`,
   },
 } as const;
