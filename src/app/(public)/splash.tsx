@@ -1,4 +1,9 @@
-import { SPLASH, SplashBackground, SplashLogo, useSplash } from "@/features/splash";
+import {
+  SPLASH,
+  SplashBackground,
+  SplashLogo,
+  useSplash,
+} from "@/features/splash";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
 import Animated, {
@@ -34,7 +39,7 @@ export default function SplashScreen() {
 
     textTranslateY.value = withDelay(500, withTiming(0, { duration: 800 }));
     textOpacity.value = withDelay(500, withTiming(1, { duration: 800 }));
-  }, [logoOpacity, logoScale, textOpacity, textTranslateY]);
+  }, []);
 
   const logoAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: logoScale.value }],
