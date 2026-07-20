@@ -1,0 +1,93 @@
+import { Pressable, View } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+
+import { AppText } from "../Text";
+import { ButtonProps } from "./Button.types";
+import ButtonLoader from "./ButtonLoader";
+import { buttonSizes } from "./buttonSizes";
+import { buttonVariants } from "./buttonVariants";
+import { cn } from "@/utils/cn";
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+export default function Button({
+  children,
+  variant = "primary",
+  size = "md",
+  loading = false,
+  disabled = false,
+  fullWidth = false,
+  leftIcon,
+  rightIcon,
+  style,
+  className,
+  onPress,
+  ...props
+}: ButtonProps) {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const variantStyle = buttonVariants[variant];
+  const sizeStyle = buttonSizes[size];
+
+  return (
+    <AnimatedPressable
+      {...props}
+      className={cn(className)}
+      disabled={disabled || loading}
+      onPressIn={() => {
+        // eslint-disable-next-line react-hooks/immutability
+        scale.value = withSpring(0.97);
+      }}
+      onPressOut={() => {
+        // eslint-disable-next-line react-hooks/immutability
+        scale.value = withSpring(1);
+      }}
+      onPress={onPress}
+      style={[
+        animatedStyle,
+        {
+          height: sizeStyle.height,
+          paddingHorizontal: sizeStyle.paddingHorizontal,
+          borderRadius: sizeStyle.borderRadius,
+          backgroundColor: variantStyle.backgroundColor,
+          borderWidth: 1,
+          borderColor: variantStyle.borderColor,
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          width: fullWidth ? "100%" : undefined,
+          opacity: disabled || loading ? 0.6 : 1,
+        },
+        style,
+      ]}
+    >
+      {loading ? (
+        <ButtonLoader color={variantStyle.textColor} />
+      ) : (
+        <>
+          {leftIcon}
+
+          <View
+            style={{
+              marginHorizontal: 6,
+            }}
+          >
+            <AppText variant="button" color={variantStyle.textColor}>
+              {children}
+            </AppText>
+          </View>
+
+          {rightIcon}
+        </>
+      )}
+    </AnimatedPressable>
+  );
+}
