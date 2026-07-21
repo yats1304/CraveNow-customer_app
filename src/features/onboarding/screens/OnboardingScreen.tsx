@@ -1,5 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { FlatList, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import BottomControls from "../components/BottomControls";
 import OnboardingItem from "../components/OnboardingItem";
 import { onboardingData } from "../data/onboarding.data";
@@ -10,35 +11,37 @@ export default function OnboardingScreen() {
     useOnboarding();
 
   return (
-    <View className="flex-1 ">
+    <View className="flex-1">
       <LinearGradient
         colors={["#FFFFFF", "#FFF8F4", "#FFFFFF"]}
-        className="flex-1"
+        style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }}
       />
-      <FlatList
-        ref={flatListRef}
-        data={onboardingData}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item, index }) => (
-          <OnboardingItem item={item} index={index} />
-        )}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        onMomentumScrollEnd={onMomentumScrollEnd}
-        initialNumToRender={1}
-        maxToRenderPerBatch={2}
-        windowSize={2}
-        removeClippedSubviews
-      />
+      <SafeAreaView className="flex-1" edges={["top", "bottom"]}>
+        <FlatList
+          ref={flatListRef}
+          data={onboardingData}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item, index }) => (
+            <OnboardingItem item={item} index={index} />
+          )}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          bounces={false}
+          onMomentumScrollEnd={onMomentumScrollEnd}
+          initialNumToRender={1}
+          maxToRenderPerBatch={2}
+          windowSize={2}
+          removeClippedSubviews
+        />
 
-      <BottomControls
-        currentIndex={currentIndex}
-        total={onboardingData.length}
-        onNext={next}
-        onSkip={skip}
-      />
+        <BottomControls
+          currentIndex={currentIndex}
+          total={onboardingData.length}
+          onNext={next}
+          onSkip={skip}
+        />
+      </SafeAreaView>
     </View>
   );
 }

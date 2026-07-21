@@ -37,13 +37,13 @@ export function useOnboarding() {
       scrollToIndex(currentIndex + 1);
     } else {
       appStorage.completeOnboarding();
-      router.replace("/(auth)/login");
+      router.replace("/(auth)/welcome");
     }
   };
 
   const skip = () => {
     appStorage.completeOnboarding();
-    router.replace("/(auth)/login");
+    router.replace("/(auth)/welcome");
   };
 
   return {

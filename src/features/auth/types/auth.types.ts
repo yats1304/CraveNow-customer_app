@@ -85,20 +85,6 @@ export interface GoogleLoginRequest {
   idToken: string;
   deviceId: string;
 }
-
-export interface AuthTokens {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export interface User {
-  _id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  avatar?: string;
-}
-
 export interface ResendOtpRequest {
   email: string;
 }
@@ -112,8 +98,7 @@ export interface ChangePasswordRequest {
 export interface AuthResponse {
   success: boolean;
   message: string;
-  data: {
-    user: User;
-    tokens: AuthTokens;
-  };
+  user: User;
+  accessToken: string;
+  refreshToken: string;
 }

@@ -42,10 +42,13 @@ export function setupInterceptors(): void {
         _retry?: boolean;
       };
 
+      const isAuthRequest = originalRequest?.url?.includes("/auth/");
+
       if (
         error.response?.status !== 401 ||
         !originalRequest ||
-        originalRequest._retry
+        originalRequest._retry ||
+        isAuthRequest
       ) {
         return Promise.reject(error);
       }

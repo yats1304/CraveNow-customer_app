@@ -1,4 +1,5 @@
 import { ImageBackground, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Props = {
   children: React.ReactNode;
@@ -12,7 +13,9 @@ export default function SplashBackground({ children }: Props) {
       style={styles.container}
       imageStyle={styles.image}
     >
-      {children}
+      <SafeAreaView style={styles.safeContainer} edges={["top", "bottom"]}>
+        {children}
+      </SafeAreaView>
     </ImageBackground>
   );
 }
@@ -21,6 +24,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
+  },
+
+  safeContainer: {
+    flex: 1,
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
