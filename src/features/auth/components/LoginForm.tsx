@@ -20,14 +20,18 @@ export function LoginForm({
   const router = useRouter();
   const loginMutation = useLogin();
 
-  const { control, handleSubmit } = useForm<LoginRequest>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<LoginRequest>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
       deviceId: getOrCreateDeviceId(),
     },
-    mode: "onTouched",
+    mode: "onChange",
   });
 
   const onSubmit = (data: LoginRequest) => {
@@ -91,10 +95,10 @@ export function LoginForm({
       <Button
         fullWidth
         loading={loginMutation.isPending}
-        disabled={loginMutation.isPending}
+        disabled={!isValid || loginMutation.isPending}
         onPress={handleSubmit(onSubmit)}
       >
-        Login
+        {loginMutation.isPending ? "Logging in..." : "Login"}
       </Button>
     </View>
   );

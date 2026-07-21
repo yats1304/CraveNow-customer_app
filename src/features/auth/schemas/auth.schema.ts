@@ -1,29 +1,38 @@
 import z from "zod";
-import { UserRole } from "../types/auth.types";
+
 import {
-  deviceIdSchema,
   emailSchema,
   otpSchema,
   passwordSchema,
   phoneSchema,
+  deviceIdSchema,
 } from "./common.schema";
 
-// Register schema
-export const registerSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(3, "Name must be at least 3 characters")
-    .max(50, "Name cannot exceed 50 characters"),
+// Register schema (client-side form shape — deviceId not needed by /auth/register)
+export const registerSchema = z
+  .object({
+    fullName: z
+      .string()
+      .trim()
+      .min(3, "Name must be at least 3 characters")
+      .max(50, "Name cannot exceed 50 characters"),
 
-  email: emailSchema,
+    email: emailSchema,
 
-  password: passwordSchema,
+    phone: phoneSchema,
 
-  phone: phoneSchema,
+    password: passwordSchema,
 
-  role: z.literal(UserRole.CUSTOMER).optional(),
-});
+    confirmPassword: z.string().min(1, "Please confirm your password"),
+
+    acceptTerms: z
+      .boolean()
+      .refine((val) => val === true, "You must accept the Terms & Privacy Policy"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
 
 // Login
 export const loginSchema = z.object({

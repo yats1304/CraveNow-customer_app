@@ -70,7 +70,14 @@ export default function Button({
       ]}
     >
       {loading ? (
-        <ButtonLoader color={variantStyle.textColor} />
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+          <ButtonLoader color={variantStyle.textColor} />
+          <View style={{ marginLeft: 8 }}>
+            <AppText variant="button" color={variantStyle.textColor}>
+              {children}
+            </AppText>
+          </View>
+        </View>
       ) : (
         <>
           {leftIcon}

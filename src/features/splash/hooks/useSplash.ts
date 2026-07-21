@@ -29,7 +29,7 @@ export function useSplash(): void {
         if (isFirst ?? true) {
           router.replace("/(public)/onboarding");
         } else if (isValidSession) {
-          router.replace("/(tabs)");
+          router.replace("/(tabs)" as any);
         } else {
           router.replace("/(auth)/login");
         }

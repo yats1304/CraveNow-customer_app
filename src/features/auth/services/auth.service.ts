@@ -8,6 +8,7 @@ import type {
   LogoutRequest,
   RefreshTokenRequest,
   RegisterRequest,
+  ResendOtpRequest,
   ResetPasswordRequest,
   VerifyOtpRequest,
 } from "../types";
@@ -27,7 +28,13 @@ export const authService = {
   },
 
   async register(data: RegisterRequest) {
-    const response = await authApi.register(data);
+    const { fullName, email, password, phone } = data;
+    const response = await authApi.register({
+      name: fullName,
+      email,
+      password,
+      ...(phone ? { phone } : {}),
+    } as any);
     return response.data;
   },
 
@@ -41,6 +48,11 @@ export const authService = {
       refreshToken,
     });
 
+    return response.data;
+  },
+
+  async resendOtp(data: ResendOtpRequest) {
+    const response = await authApi.resendOtp(data);
     return response.data;
   },
 

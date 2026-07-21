@@ -1,3 +1,5 @@
 import { LoginScreen } from "@/features/auth";
 
-export default LoginScreen;
+export default function Login() {
+  return <LoginScreen />;
+}
