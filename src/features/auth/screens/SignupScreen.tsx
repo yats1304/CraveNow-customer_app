@@ -23,6 +23,7 @@ export function SignupScreen() {
       pathname: "/(auth)/verify-otp",
       params: {
         email: data.email,
+        purpose: "signup",
       },
     } as any);
   };

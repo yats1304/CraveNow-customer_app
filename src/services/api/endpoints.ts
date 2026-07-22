@@ -9,6 +9,7 @@ export const AUTH_ENDPOINTS = {
     REFRESH_TOKEN: `${AUTH}/refresh`,
     VERIFY_OTP: `${AUTH}/verify-otp`,
     RESEND_OTP: `${AUTH}/resend-otp`,
+    RESEND_FORGOT_PASSWORD_OTP: `${AUTH}/resend-forgot-password-otp`,
     ME: `${AUTH}/me`,
     FORGOT_PASSWORD: `${AUTH}/forgot-password`,
     RESET_PASSWORD_OTP: `${AUTH}/reset-password`,

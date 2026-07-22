@@ -7,3 +7,4 @@ export * from "./useVerifyOtp";
 export * from "./useRestoreSession";
 export * from "./useAuth";
 export * from "./useResendOtp";
+export * from "./useResetPassword";

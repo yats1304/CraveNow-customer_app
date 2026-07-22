@@ -1,8 +1,8 @@
+import { AppText } from "@/components/ui/Text";
 import { OnboardingItemType } from "@/features/onboarding";
 import { Image } from "expo-image";
 import { Dimensions, View } from "react-native";
 import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { AppText } from "@/components/ui/Text";
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 const AnimatedAppText = Animated.createAnimatedComponent(AppText);

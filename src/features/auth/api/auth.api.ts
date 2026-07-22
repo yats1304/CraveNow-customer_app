@@ -34,6 +34,13 @@ export const authApi = {
     );
   },
 
+  resendForgotPasswordOtp(data: ResendOtpRequest) {
+    return apiClient.post<{ success: boolean; message: string }>(
+      AUTH_ENDPOINTS.AUTH.RESEND_FORGOT_PASSWORD_OTP,
+      data,
+    );
+  },
+
   forgotPassword(data: ForgotPasswordRequest) {
     return apiClient.post<{ success: boolean; message: string }>(
       AUTH_ENDPOINTS.AUTH.FORGOT_PASSWORD,

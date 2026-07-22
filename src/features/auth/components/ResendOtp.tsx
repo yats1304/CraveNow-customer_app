@@ -1,3 +1,4 @@
+import { showToast } from "@/utils";
 import { useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 
@@ -7,11 +8,16 @@ import { useResendOtp } from "../hooks";
 
 interface ResendOtpProps {
   email: string;
+  purpose?: "signup" | "reset-password";
   initialTime?: number;
 }
 
-export function ResendOtp({ email, initialTime = 60 }: ResendOtpProps) {
-  const resendMutation = useResendOtp();
+export function ResendOtp({
+  email,
+  purpose,
+  initialTime = 60,
+}: ResendOtpProps) {
+  const resendMutation = useResendOtp(purpose);
 
   const [seconds, setSeconds] = useState(initialTime);
 
@@ -29,8 +35,19 @@ export function ResendOtp({ email, initialTime = 60 }: ResendOtpProps) {
     resendMutation.mutate(
       { email },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           setSeconds(initialTime);
+          showToast.success(
+            data?.message || "Verification code has been resent successfully!",
+          );
+        },
+        onError: (error: any) => {
+          const message =
+            error?.response?.data?.message ||
+            error?.message ||
+            "Failed to resend verification code. Please try again.";
+
+          showToast.error(message);
         },
       },
     );

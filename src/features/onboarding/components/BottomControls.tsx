@@ -1,5 +1,5 @@
-import { View } from "react-native";
 import { Button } from "@/components/ui/Button";
+import { View } from "react-native";
 import Pagination from "./Pagination";
 
 type Props = {

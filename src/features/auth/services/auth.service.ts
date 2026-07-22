@@ -56,6 +56,11 @@ export const authService = {
     return response.data;
   },
 
+  async resendForgotPasswordOtp(data: ResendOtpRequest) {
+    const response = await authApi.resendForgotPasswordOtp(data);
+    return response.data;
+  },
+
   async forgotPassword(data: ForgotPasswordRequest) {
     const response = await authApi.forgotPassword(data);
     return response.data;

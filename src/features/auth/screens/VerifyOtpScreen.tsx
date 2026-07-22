@@ -8,13 +8,22 @@ import { ResendOtp, VerifyOtpForm, VerifyOtpHeader } from "../components";
 export function VerifyOtpScreen() {
   const router = useRouter();
 
-  const { email } = useLocalSearchParams<{
+  const { email, purpose } = useLocalSearchParams<{
     email: string;
+    purpose: "signup" | "reset-password";
   }>();
 
-  const handleVerifySuccess = () => {
-    showToast.success("Email verified successfully!");
-    // router.replace("/(tabs)" as any);
+  const handleVerifySuccess = (otpCode?: string) => {
+    if (purpose === "reset-password") {
+      showToast.success("Code entered! Please set your new password.");
+      router.replace({
+        pathname: "/(auth)/reset-password",
+        params: { email, otp: otpCode },
+      } as any);
+    } else {
+      showToast.success("Email verified successfully!");
+      router.replace("/(auth)/login");
+    }
   };
 
   const handleVerifyError = (error: any) => {
@@ -47,12 +56,13 @@ export function VerifyOtpScreen() {
 
             <VerifyOtpForm
               email={email ?? ""}
+              purpose={purpose}
               onSuccess={handleVerifySuccess}
               onError={handleVerifyError}
             />
           </View>
 
-          <ResendOtp email={email ?? ""} />
+          <ResendOtp email={email ?? ""} purpose={purpose} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

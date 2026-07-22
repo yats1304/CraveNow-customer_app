@@ -12,12 +12,14 @@ import type { VerifyOtpRequest } from "../types";
 
 interface VerifyOtpFormProps {
   email: string;
-  onSuccess?: (data?: any) => void;
+  purpose?: "signup" | "reset-password";
+  onSuccess?: (otp?: string) => void;
   onError?: (error: unknown) => void;
 }
 
 export function VerifyOtpForm({
   email,
+  purpose,
   onSuccess,
   onError,
 }: VerifyOtpFormProps) {
@@ -40,9 +42,14 @@ export function VerifyOtpForm({
   const otp = watch("otp");
 
   const onSubmit = (data: VerifyOtpRequest) => {
+    if (purpose === "reset-password") {
+      onSuccess?.(data.otp);
+      return;
+    }
+
     verifyOtpMutation.mutate(data, {
-      onSuccess: (resData) => {
-        onSuccess?.(resData);
+      onSuccess: () => {
+        onSuccess?.();
       },
       onError: (error) => {
         onError?.(error);

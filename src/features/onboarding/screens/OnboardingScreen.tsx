@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { FlatList, View } from "react-native";
+import { FlatList, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BottomControls from "../components/BottomControls";
 import OnboardingItem from "../components/OnboardingItem";
@@ -7,8 +7,26 @@ import { onboardingData } from "../data/onboarding.data";
 import { useOnboarding } from "../hooks/useOnboarding";
 
 export default function OnboardingScreen() {
+  const { width } = useWindowDimensions();
   const { flatListRef, onMomentumScrollEnd, currentIndex, next, skip } =
     useOnboarding();
+
+  const getItemLayout = (_: any, index: number) => ({
+    length: width,
+    offset: width * index,
+    index,
+  });
+
+  const onScrollToIndexFailed = (info: {
+    index: number;
+    highestMeasuredFrameIndex: number;
+    averageItemLength: number;
+  }) => {
+    flatListRef.current?.scrollToOffset({
+      offset: info.index * width,
+      animated: true,
+    });
+  };
 
   return (
     <View className="flex-1">
@@ -29,6 +47,8 @@ export default function OnboardingScreen() {
           showsHorizontalScrollIndicator={false}
           bounces={false}
           onMomentumScrollEnd={onMomentumScrollEnd}
+          getItemLayout={getItemLayout}
+          onScrollToIndexFailed={onScrollToIndexFailed}
           initialNumToRender={1}
           maxToRenderPerBatch={2}
           windowSize={2}
