@@ -8,3 +8,4 @@ export * from "./useRestoreSession";
 export * from "./useAuth";
 export * from "./useResendOtp";
 export * from "./useResetPassword";
+export * from "./useGoogleLogin";

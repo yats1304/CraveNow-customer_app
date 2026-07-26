@@ -70,7 +70,7 @@ export function VerifyOtpForm({
       <Button
         fullWidth
         loading={verifyOtpMutation.isPending}
-        disabled={otp.length !== 6 || verifyOtpMutation.isPending}
+        disabled={(otp?.length ?? 0) !== 6 || verifyOtpMutation.isPending}
         onPress={handleSubmit(onSubmit)}
       >
         {verifyOtpMutation.isPending ? "Verifying OTP..." : "Verify OTP"}

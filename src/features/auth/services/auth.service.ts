@@ -1,5 +1,7 @@
 import { authStorage } from "@/services/storage";
+import { getOrCreateDeviceId } from "@/utils/device";
 import { authApi } from "../api";
+import { getGoogleIdToken } from "../utils";
 
 import type {
   ForgotPasswordRequest,
@@ -93,8 +95,11 @@ export const authService = {
     }
   },
 
-  async googleLogin(data: GoogleLoginRequest) {
-    const response = await authApi.googleLogin(data);
+  async googleLogin(data?: GoogleLoginRequest) {
+    const idToken = data?.idToken || (await getGoogleIdToken());
+    const deviceId = data?.deviceId || getOrCreateDeviceId();
+
+    const response = await authApi.googleLogin({ idToken, deviceId });
     const { user, accessToken, refreshToken } = response.data;
 
     authStorage.saveSession({

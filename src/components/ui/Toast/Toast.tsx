@@ -1,15 +1,14 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { Animated, Platform, StatusBar, StyleSheet, Text } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export interface ToastRef {
   success: (message: string) => void;
   error: (message: string) => void;
 }
 
-const STATUS_BAR_HEIGHT =
-  Platform.OS === "ios" ? 54 : (StatusBar.currentHeight ?? 24);
-
 export const Toast = forwardRef<ToastRef, {}>((_, ref) => {
+  const insets = useSafeAreaInsets();
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
   const [type, setType] = useState<"success" | "error">("success");
@@ -17,7 +16,14 @@ export const Toast = forwardRef<ToastRef, {}>((_, ref) => {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const timeoutRef = useRef<any>(null);
 
-  const BANNER_HEIGHT = STATUS_BAR_HEIGHT + 64;
+  const statusBarHeight =
+    insets.top > 0
+      ? insets.top
+      : Platform.OS === "android"
+        ? (StatusBar.currentHeight ?? 24)
+        : 20;
+
+  const BANNER_HEIGHT = statusBarHeight + 48;
 
   const openToast = (msg: string, toastType: "success" | "error") => {
     if (timeoutRef.current) {
@@ -76,6 +82,7 @@ export const Toast = forwardRef<ToastRef, {}>((_, ref) => {
         styles.container,
         {
           height: BANNER_HEIGHT,
+          paddingTop: statusBarHeight + 12,
           backgroundColor,
           transform: [{ translateY }],
         },
@@ -95,8 +102,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 9999,
-    // Push text below the status bar notch
-    paddingTop: STATUS_BAR_HEIGHT + 12,
     paddingHorizontal: 20,
     justifyContent: "flex-end",
     paddingBottom: 16,

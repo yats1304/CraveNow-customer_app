@@ -1,4 +1,4 @@
-import { Button, Input } from "@/components/ui";
+import { AppText, Button, Input } from "@/components/ui";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -6,10 +6,11 @@ import { View } from "react-native";
 import { useResetPassword } from "../hooks";
 import { resetPasswordSchema } from "../schemas";
 import type { ResetPasswordRequest } from "../types";
+import { OtpInput } from "./OtpInput";
 
 interface ResetPasswordFormProps {
   email: string;
-  otp: string;
+  otp?: string;
   onSuccess?: () => void;
   onError?: (error: unknown) => void;
 }
@@ -20,7 +21,7 @@ type ResetPasswordFormData = ResetPasswordRequest & {
 
 export function ResetPasswordForm({
   email,
-  otp,
+  otp = "",
   onSuccess,
   onError,
 }: ResetPasswordFormProps) {
@@ -43,8 +44,8 @@ export function ResetPasswordForm({
   });
 
   useEffect(() => {
-    setValue("email", email);
-    setValue("otp", otp);
+    if (email) setValue("email", email);
+    if (otp) setValue("otp", otp);
   }, [email, otp, setValue]);
 
   const onSubmit = (data: ResetPasswordFormData) => {
@@ -66,7 +67,29 @@ export function ResetPasswordForm({
   };
 
   return (
-    <View className="mt-10 gap-6">
+    <View className="mt-8 gap-6">
+      <View className="gap-2">
+        <AppText weight="500">Verification Code (OTP)</AppText>
+        <Controller
+          control={control}
+          name="otp"
+          render={({ field, fieldState }) => (
+            <View>
+              <OtpInput
+                value={field.value}
+                onChange={field.onChange}
+                autoFocus={!otp}
+              />
+              {fieldState.error?.message ? (
+                <AppText className="mt-1 text-xs text-danger">
+                  {fieldState.error.message}
+                </AppText>
+              ) : null}
+            </View>
+          )}
+        />
+      </View>
+
       <Controller
         control={control}
         name="password"

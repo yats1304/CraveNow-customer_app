@@ -1,16 +1,16 @@
 import { showToast } from "@/utils";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { ResetPasswordForm, ResetPasswordHeader } from "../components";
+import { ResendOtp, ResetPasswordForm, ResetPasswordHeader } from "../components";
 
 export function ResetPasswordScreen() {
   const router = useRouter();
 
   const { email, otp } = useLocalSearchParams<{
     email: string;
-    otp: string;
+    otp?: string;
   }>();
 
   const handleResetPasswordSuccess = () => {
@@ -40,18 +40,23 @@ export function ResetPasswordScreen() {
           contentContainerStyle={{
             flexGrow: 1,
             padding: 24,
+            justifyContent: "space-between",
           }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <ResetPasswordHeader />
+          <View>
+            <ResetPasswordHeader />
 
-          <ResetPasswordForm
-            email={email ?? ""}
-            otp={otp ?? ""}
-            onSuccess={handleResetPasswordSuccess}
-            onError={handleResetPasswordError}
-          />
+            <ResetPasswordForm
+              email={email ?? ""}
+              otp={otp ?? ""}
+              onSuccess={handleResetPasswordSuccess}
+              onError={handleResetPasswordError}
+            />
+          </View>
+
+          <ResendOtp email={email ?? ""} purpose="reset-password" />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

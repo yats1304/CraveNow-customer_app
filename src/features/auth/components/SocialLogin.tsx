@@ -1,9 +1,20 @@
 import { Button } from "@/components/ui";
+import { showToast } from "@/utils";
 import { Image } from "expo-image";
+import { useEffect } from "react";
+import { useGoogleLogin } from "../hooks";
 
 const googleIcon = require("@/assets/images/google.svg");
 
 export function SocialLogin() {
+  const { signIn, isPending, error } = useGoogleLogin();
+
+  useEffect(() => {
+    if (error) {
+      showToast.error(error);
+    }
+  }, [error]);
+
   return (
     <Button
       variant="outline"
@@ -15,7 +26,9 @@ export function SocialLogin() {
         />
       }
       fullWidth
-      onPress={() => {}}
+      loading={isPending}
+      disabled={isPending}
+      onPress={signIn}
     >
       Continue with Google
     </Button>

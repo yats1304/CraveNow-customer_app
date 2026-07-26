@@ -40,10 +40,9 @@ export function ForgotPasswordForm({
         onSuccess?.();
 
         router.push({
-          pathname: "/(auth)/verify-otp",
+          pathname: "/(auth)/reset-password",
           params: {
             email: data.email,
-            purpose: "reset-password",
           },
         });
       },

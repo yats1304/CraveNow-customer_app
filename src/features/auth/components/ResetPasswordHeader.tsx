@@ -19,8 +19,7 @@ export function ResetPasswordHeader() {
         <AppText variant="h1">Reset Password</AppText>
 
         <AppText variant="body" color="secondary">
-          Please enter your new password below. Ensure it is at least 8
-          characters with numbers & symbols.
+          Enter the 6-digit verification code sent to your email and set your new password below.
         </AppText>
       </View>
     </View>

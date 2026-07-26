@@ -18,7 +18,7 @@ export function VerifyOtpScreen() {
       showToast.success("Code entered! Please set your new password.");
       router.replace({
         pathname: "/(auth)/reset-password",
-        params: { email, otp: otpCode },
+        params: { email: email ?? "", otp: otpCode ?? "" },
       } as any);
     } else {
       showToast.success("Email verified successfully!");
