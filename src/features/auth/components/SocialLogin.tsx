@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui";
+import { Button, Loader } from "@/components/ui";
 import { showToast } from "@/utils";
 import { Image } from "expo-image";
 import { useEffect } from "react";
@@ -14,6 +14,10 @@ export function SocialLogin() {
       showToast.error(error);
     }
   }, [error]);
+
+  if (isPending) {
+    return <Loader variant="overlay" text="Signing in with Google..." />;
+  }
 
   return (
     <Button

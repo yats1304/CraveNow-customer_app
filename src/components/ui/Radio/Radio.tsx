@@ -1,4 +1,5 @@
 import { Pressable, View } from "react-native";
+import { useColorScheme } from "nativewind";
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -19,6 +20,9 @@ export default function Radio({
   style,
   className,
 }: RadioProps) {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   const animatedOuterStyle = useAnimatedStyle(() => {
     return {
       borderColor: withTiming(
@@ -26,6 +30,8 @@ export default function Radio({
           ? disabled
             ? Colors.gray[300]
             : Colors.primary[500]
+          : isDark
+          ? Colors.gray[700]
           : Colors.gray[300]
       ),
     };
@@ -62,7 +68,7 @@ export default function Radio({
           style={animatedInnerStyle}
           className={cn(
             "w-3 h-3 rounded-full",
-            disabled ? "bg-gray-300" : "bg-primary"
+            disabled ? "bg-gray-300 dark:bg-neutral-600" : "bg-primary"
           )}
         />
       </AnimatedView>
@@ -70,7 +76,12 @@ export default function Radio({
       {label && (
         <AppText
           variant="body"
-          className={cn("ml-3", disabled ? "text-gray-400" : "text-gray-900")}
+          className={cn(
+            "ml-3",
+            disabled
+              ? "text-gray-400 dark:text-neutral-500"
+              : "text-gray-900 dark:text-gray-100"
+          )}
         >
           {label}
         </AppText>

@@ -5,6 +5,7 @@ import { authStorage } from "@/services/storage";
 import { useAppDispatch } from "@/store/hooks";
 import { showToast } from "@/utils";
 import { getOrCreateDeviceId } from "@/utils/device";
+import { router } from "expo-router";
 import { useState } from "react";
 import { authApi } from "../api";
 
@@ -36,6 +37,7 @@ export function useGoogleLogin() {
       authStorage.saveSession({ user, accessToken, refreshToken });
       syncSession(dispatch, apiResponse.data);
       showToast.success("Signed in with Google successfully.");
+      router.replace("/(protected)" as any);
     } catch (err: any) {
       if (err.code !== "SIGN_IN_CANCELLED") {
         setError(

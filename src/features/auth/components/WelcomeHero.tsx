@@ -1,6 +1,5 @@
 import { Image, View } from "react-native";
 
-import { Colors } from "@/components/theme";
 import { AppText } from "@/components/ui";
 
 export function WelcomeHero() {
@@ -18,9 +17,8 @@ export function WelcomeHero() {
 
       <AppText
         variant="body"
-        color={Colors.gray[600]}
         align="center"
-        className="mt-4 px-8"
+        className="mt-4 px-8 text-gray-600 dark:text-gray-400"
       >
         Discover the best restaurants around you and get your favorite meals
         delivered in minutes.

@@ -5,7 +5,7 @@ import { WelcomeHero } from "../components/WelcomeHero";
 
 export function WelcomeScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-white dark:bg-neutral-950">
       <View className="flex-1 px-6 py-8">
         <View className="flex-1 justify-center">
           <WelcomeHero />

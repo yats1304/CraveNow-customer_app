@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { FlatList, View, useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useTheme } from "@/providers";
 import BottomControls from "../components/BottomControls";
 import OnboardingItem from "../components/OnboardingItem";
 import { onboardingData } from "../data/onboarding.data";
@@ -8,6 +9,7 @@ import { useOnboarding } from "../hooks/useOnboarding";
 
 export default function OnboardingScreen() {
   const { width } = useWindowDimensions();
+  const { isDark } = useTheme();
   const { flatListRef, onMomentumScrollEnd, currentIndex, next, skip } =
     useOnboarding();
 
@@ -29,9 +31,13 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-white dark:bg-neutral-950">
       <LinearGradient
-        colors={["#FFFFFF", "#FFF8F4", "#FFFFFF"]}
+        colors={
+          isDark
+            ? ["#171717", "#0F0F0F", "#171717"]
+            : ["#FFFFFF", "#FFF8F4", "#FFFFFF"]
+        }
         style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }}
       />
       <SafeAreaView className="flex-1" edges={["top", "bottom"]}>

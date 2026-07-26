@@ -23,18 +23,22 @@ export default function EmptyState({
         className
       )}
     >
-      <View className="w-20 h-20 rounded-full bg-gray-50 justify-center items-center mb-5 border border-gray-100/50">
+      <View className="w-20 h-20 rounded-full bg-gray-50 dark:bg-neutral-800 justify-center items-center mb-5 border border-gray-100/50 dark:border-neutral-700/50">
         <AppIcon name={iconName} size={40} color={Colors.gray[400]} />
       </View>
 
-      <AppText variant="h3" weight="700" className="text-gray-900 text-center">
+      <AppText
+        variant="h3"
+        weight="700"
+        className="text-gray-900 dark:text-gray-100 text-center"
+      >
         {title}
       </AppText>
 
       {description && (
         <AppText
           variant="bodySmall"
-          className="text-gray-500 text-center mt-2 mb-6 max-w-xs"
+          className="text-gray-500 dark:text-gray-400 text-center mt-2 mb-6 max-w-xs"
         >
           {description}
         </AppText>

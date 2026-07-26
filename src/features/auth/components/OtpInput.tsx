@@ -43,7 +43,7 @@ export function OtpInput({
                 ${
                   focused
                     ? "border-primary bg-primary/5"
-                    : "border-border bg-card"
+                    : "border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800"
                 }`}
             >
               <AppText variant="h2">{digit}</AppText>

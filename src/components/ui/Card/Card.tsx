@@ -33,17 +33,21 @@ export default function Card({
       )}
     >
       {header && (
-        <View className="border-b border-gray-100/80 pb-3 mb-3">{header}</View>
+        <View className="border-b border-gray-100/80 dark:border-neutral-700/80 pb-3 mb-3">
+          {header}
+        </View>
       )}
 
       <View className="flex-1">{children}</View>
 
       {footer && (
-        <View className="border-t border-gray-100/80 pt-3 mt-3">{footer}</View>
+        <View className="border-t border-gray-100/80 dark:border-neutral-700/80 pt-3 mt-3">
+          {footer}
+        </View>
       )}
 
       {loading && (
-        <View className="absolute inset-0 bg-white/60 justify-center items-center">
+        <View className="absolute inset-0 bg-white/60 dark:bg-neutral-900/60 justify-center items-center">
           <ActivityIndicator color={Colors.primary[500]} size="small" />
         </View>
       )}

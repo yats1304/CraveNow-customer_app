@@ -38,6 +38,7 @@ export function LoginForm({
     loginMutation.mutate(data, {
       onSuccess: () => {
         onSuccess?.();
+        router.replace("/(protected)" as any);
       },
       onError: (error) => {
         onError?.(error);

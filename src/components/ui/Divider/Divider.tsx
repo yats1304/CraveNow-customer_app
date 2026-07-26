@@ -21,17 +21,17 @@ export default function Divider({
         style={[{ marginVertical: defaultSpacing }, style]}
         className={cn("flex-row items-center", className)}
       >
-        <View className="flex-1 h-[1px] bg-gray-200" />
+        <View className="flex-1 h-[1px] bg-gray-200 dark:bg-neutral-800" />
         <View className="px-3">
           {typeof children === "string" ? (
-            <AppText variant="caption" className="text-gray-400 font-medium">
+            <AppText variant="caption" className="text-gray-400 dark:text-neutral-500 font-medium">
               {children}
             </AppText>
           ) : (
             children
           )}
         </View>
-        <View className="flex-1 h-[1px] bg-gray-200" />
+        <View className="flex-1 h-[1px] bg-gray-200 dark:bg-neutral-800" />
       </View>
     );
   }
@@ -52,7 +52,7 @@ export default function Divider({
             },
         style,
       ]}
-      className={cn("bg-gray-200", className)}
+      className={cn("bg-gray-200 dark:bg-neutral-800", className)}
     />
   );
 }

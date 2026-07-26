@@ -1,4 +1,5 @@
 import { Pressable, View, ActivityIndicator } from "react-native";
+import { useColorScheme } from "nativewind";
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -18,6 +19,9 @@ export default function Switch({
   style,
   className,
 }: SwitchProps) {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   const animatedTrackStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: withTiming(
@@ -26,7 +30,11 @@ export default function Switch({
             ? Colors.primary[200]
             : Colors.primary[500]
           : disabled
-          ? Colors.gray[200]
+          ? isDark
+            ? "#404040"
+            : Colors.gray[200]
+          : isDark
+          ? "#525252"
           : Colors.gray[300]
       ),
     };

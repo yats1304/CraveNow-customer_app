@@ -48,7 +48,7 @@ export default function Modal({
           exiting={SlideOutDown.duration(200)}
           style={style}
           className={cn(
-            "bg-white w-full rounded-t-[28px] p-6 max-h-[85%] pb-10 shadow-xl relative z-10",
+            "bg-white dark:bg-neutral-900 w-full rounded-t-[28px] p-6 max-h-[85%] pb-10 shadow-xl relative z-10",
             className
           )}
         >
@@ -56,12 +56,12 @@ export default function Modal({
           <View className="flex-row justify-between items-start mb-4">
             <View className="flex-1 pr-4">
               {title && (
-                <AppText variant="h3" weight="700" className="text-gray-900">
+                <AppText variant="h3" weight="700">
                   {title}
                 </AppText>
               )}
               {subtitle && (
-                <AppText variant="bodySmall" className="text-gray-500 mt-1">
+                <AppText variant="bodySmall" color={Colors.gray[500]} className="mt-1">
                   {subtitle}
                 </AppText>
               )}
@@ -70,11 +70,11 @@ export default function Modal({
             <Pressable
               onPress={onClose}
               hitSlop={8}
-              className="w-8 h-8 rounded-full bg-gray-100 justify-center items-center"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-neutral-800 justify-center items-center"
               accessibilityRole="button"
               accessibilityLabel="Close dialog"
             >
-              <AppIcon name="close" size={18} color={Colors.gray[600]} />
+              <AppIcon name="close" size={18} color={Colors.gray[500]} />
             </Pressable>
           </View>
 

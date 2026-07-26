@@ -4,6 +4,7 @@ import GorhomBottomSheet, {
   BottomSheetView,
   BottomSheetBackdropProps,
 } from "@gorhom/bottom-sheet";
+import { useColorScheme } from "nativewind";
 import { cn } from "@/utils/cn";
 import { Colors } from "@/components/theme";
 import { BottomSheetProps } from "./BottomSheet.types";
@@ -20,6 +21,9 @@ const BottomSheet = forwardRef<GorhomBottomSheet, BottomSheetProps>(
     },
     ref,
   ) => {
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === "dark";
+
     // Custom backdrop render displaying semi-transparent overlay
     const renderBackdrop = useCallback(
       (props: BottomSheetBackdropProps) => (
@@ -42,11 +46,11 @@ const BottomSheet = forwardRef<GorhomBottomSheet, BottomSheetProps>(
         onChange={onIndexChange}
         backdropComponent={renderBackdrop}
         handleIndicatorStyle={{
-          backgroundColor: Colors.gray[300],
+          backgroundColor: isDark ? "#525252" : Colors.gray[300],
           width: 40,
         }}
         backgroundStyle={{
-          backgroundColor: Colors.white,
+          backgroundColor: isDark ? "#171717" : Colors.white,
           borderRadius: 24,
         }}
         style={style}

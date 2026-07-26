@@ -10,6 +10,7 @@ interface StyleResolverProps {
   focused: boolean;
   invalid: boolean;
   editable: boolean;
+  isDark?: boolean;
 }
 
 export function resolveInputStyles({
@@ -18,21 +19,28 @@ export function resolveInputStyles({
   focused,
   invalid,
   editable,
+  isDark = false,
 }: StyleResolverProps) {
-  const variantStyle = inputVariants[variant];
   const sizeStyle = inputSizes[size];
 
-  let borderColor = Colors.gray[300];
+  let borderColor = isDark ? "#404040" : Colors.gray[300];
   if (!editable) {
-    borderColor = Colors.gray[200];
+    borderColor = isDark ? "#262626" : Colors.gray[200];
   } else if (invalid) {
     borderColor = Colors.danger[500];
   } else if (focused) {
     borderColor = Colors.primary[500];
   }
 
+  let backgroundColor = isDark ? "#171717" : Colors.white;
+  if (variant === "filled") {
+    backgroundColor = isDark ? "#262626" : Colors.gray[100];
+  } else if (variant === "underlined") {
+    backgroundColor = "transparent";
+  }
+
   const containerStyle: ViewStyle = {
-    ...variantStyle,
+    backgroundColor,
     height: sizeStyle.height,
     borderRadius: sizeStyle.borderRadius,
     paddingHorizontal: sizeStyle.paddingHorizontal,
@@ -55,7 +63,7 @@ export function resolveInputStyles({
   const inputStyle: TextStyle = {
     flex: 1,
     fontSize: sizeStyle.fontSize,
-    color: Colors.gray[900],
+    color: isDark ? "#F9FAFB" : Colors.gray[900],
   };
 
   return {

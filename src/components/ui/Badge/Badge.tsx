@@ -1,4 +1,5 @@
 import { View } from "react-native";
+import { useColorScheme } from "nativewind";
 import { cn } from "@/utils/cn";
 import { AppText } from "../Text";
 import { BadgeProps } from "./Badge.types";
@@ -12,8 +13,14 @@ export default function Badge({
   style,
   className,
 }: BadgeProps) {
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   const variantStyle = badgeVariants[variant];
   const sizeStyle = badgeSizes[size];
+
+  const textColor =
+    isDark && variant === "secondary" ? "#E5E5E5" : variantStyle.textColor;
 
   return (
     <View
@@ -30,7 +37,7 @@ export default function Badge({
         <AppText
           variant={sizeStyle.textVariant}
           weight="600"
-          style={{ color: variantStyle.textColor }}
+          style={{ color: textColor }}
         >
           {children}
         </AppText>

@@ -23,18 +23,22 @@ export default function ErrorState({
         className
       )}
     >
-      <View className="w-20 h-20 rounded-full bg-red-50 justify-center items-center mb-5 border border-red-100/50">
+      <View className="w-20 h-20 rounded-full bg-red-50 dark:bg-red-950/40 justify-center items-center mb-5 border border-red-100/50 dark:border-red-900/40">
         <AppIcon name={iconName} size={40} color={Colors.danger[500]} />
       </View>
 
-      <AppText variant="h3" weight="700" className="text-gray-900 text-center">
+      <AppText
+        variant="h3"
+        weight="700"
+        className="text-gray-900 dark:text-gray-100 text-center"
+      >
         {title}
       </AppText>
 
       {description && (
         <AppText
           variant="bodySmall"
-          className="text-gray-500 text-center mt-2 mb-6 max-w-xs"
+          className="text-gray-500 dark:text-gray-400 text-center mt-2 mb-6 max-w-xs"
         >
           {description}
         </AppText>

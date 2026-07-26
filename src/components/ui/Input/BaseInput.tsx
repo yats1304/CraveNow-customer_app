@@ -1,6 +1,7 @@
 import { Colors } from "@/components/theme";
 import { forwardRef, useState } from "react";
 import { TextInput, View } from "react-native";
+import { useColorScheme } from "nativewind";
 import { resolveInputStyles } from "./Input.styles";
 import { InputProps } from "./Input.types";
 import InputIcon from "./InputIcon";
@@ -26,6 +27,8 @@ const BaseInput = forwardRef<TextInput, InputProps>(
   ) => {
     const [focused, setFocused] = useState(false);
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === "dark";
 
     const {
       containerStyle: resolvedContainerStyle,
@@ -36,6 +39,7 @@ const BaseInput = forwardRef<TextInput, InputProps>(
       focused,
       invalid: invalid,
       editable,
+      isDark,
     });
 
     return (
@@ -58,8 +62,9 @@ const BaseInput = forwardRef<TextInput, InputProps>(
             setFocused(false);
             props.onBlur?.(e);
           }}
+          className="flex-1 text-gray-900 dark:text-gray-100"
           style={[resolvedInputStyle, style]}
-          placeholderTextColor={Colors.gray[400]}
+          placeholderTextColor={isDark ? "#9CA3AF" : Colors.gray[400]}
         />
 
         {secureTextEntry ? (

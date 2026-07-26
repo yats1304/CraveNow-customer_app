@@ -1,4 +1,5 @@
 import { Pressable, View } from "react-native";
+import { useColorScheme } from "nativewind";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -29,6 +30,8 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const scale = useSharedValue(1);
+  const { colorScheme } = useColorScheme();
+  const isDark = colorScheme === "dark";
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -36,6 +39,22 @@ export default function Button({
 
   const variantStyle = buttonVariants[variant];
   const sizeStyle = buttonSizes[size];
+
+  let backgroundColor = variantStyle.backgroundColor;
+  let borderColor = variantStyle.borderColor;
+  let textColor = variantStyle.textColor;
+
+  if (isDark) {
+    if (variant === "secondary") {
+      backgroundColor = "#262626";
+      borderColor = "#262626";
+      textColor = "#F5F5F5";
+    } else if (variant === "outline") {
+      backgroundColor = "transparent";
+      borderColor = "#404040";
+      textColor = "#F5F5F5";
+    }
+  }
 
   return (
     <AnimatedPressable
@@ -57,9 +76,9 @@ export default function Button({
           height: sizeStyle.height,
           paddingHorizontal: sizeStyle.paddingHorizontal,
           borderRadius: sizeStyle.borderRadius,
-          backgroundColor: variantStyle.backgroundColor,
+          backgroundColor,
           borderWidth: 1,
-          borderColor: variantStyle.borderColor,
+          borderColor,
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "row",
@@ -71,9 +90,9 @@ export default function Button({
     >
       {loading ? (
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-          <ButtonLoader color={variantStyle.textColor} />
+          <ButtonLoader color={textColor} />
           <View style={{ marginLeft: 8 }}>
-            <AppText variant="button" color={variantStyle.textColor}>
+            <AppText variant="button" color={textColor}>
               {children}
             </AppText>
           </View>
@@ -87,7 +106,7 @@ export default function Button({
               marginHorizontal: 6,
             }}
           >
-            <AppText variant="button" color={variantStyle.textColor}>
+            <AppText variant="button" color={textColor}>
               {children}
             </AppText>
           </View>

@@ -39,7 +39,7 @@ export default function Avatar({
         style,
       ]}
       className={cn(
-        "relative rounded-full justify-center items-center bg-gray-100",
+        "relative rounded-full justify-center items-center bg-gray-100 dark:bg-neutral-800",
         className
       )}
     >
@@ -54,7 +54,7 @@ export default function Avatar({
         <AppText
           variant={sizeConfig.textVariant}
           weight="600"
-          className="text-gray-600"
+          className="text-gray-600 dark:text-gray-300"
         >
           {initials}
         </AppText>
@@ -74,7 +74,7 @@ export default function Avatar({
             bottom: 0,
             right: 0,
           }}
-          className="absolute rounded-full bg-success border-2 border-white"
+          className="absolute rounded-full bg-success border-2 border-white dark:border-neutral-900"
         />
       )}
     </View>

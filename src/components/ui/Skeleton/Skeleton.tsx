@@ -56,7 +56,7 @@ export default function Skeleton({
         } as ViewStyle,
         style,
       ]}
-      className={cn("bg-gray-200", className)}
+      className={cn("bg-gray-200 dark:bg-neutral-800", className)}
     />
   );
 }

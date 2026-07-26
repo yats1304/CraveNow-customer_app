@@ -12,7 +12,7 @@ export function AuthActions() {
         Get Started
       </Button>
 
-      <View className="flex-row justify-center">
+      <View className="flex-row items-center justify-center">
         <AppText color="secondary">Already have an account?</AppText>
 
         <Pressable onPress={() => router.push("/(auth)/login")}>

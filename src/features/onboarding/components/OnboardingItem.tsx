@@ -30,7 +30,7 @@ export default function OnboardingItem({ item, index }: Props) {
         variant="h1"
         weight="700"
         align="center"
-        className="mt-8 text-gray-900"
+        className="mt-8 text-gray-900 dark:text-gray-100"
       >
         {item.title}
       </AnimatedAppText>
@@ -40,7 +40,7 @@ export default function OnboardingItem({ item, index }: Props) {
         entering={FadeInUp.delay(350)}
         variant="body"
         align="center"
-        className="text-gray-500 mt-4 leading-6"
+        className="text-gray-500 dark:text-gray-400 mt-4 leading-6"
       >
         {item.description}
       </AnimatedAppText>
