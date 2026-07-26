@@ -1,33 +1,77 @@
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { authStorage } from "../storage";
+import { authEvents } from "./authEvents";
 import { api } from "./axios";
+import { AUTH_ENDPOINTS } from "./endpoints";
 import { refreshAccessToken } from "./refreshToken";
 
-let isRefreshing = false;
-let failedQueue: {
-  resolve: (token: string) => void;
-  reject: (error: unknown) => void;
-}[] = [];
+// Endpoints where a 401 response does NOT indicate an expired access token
+const SKIP_REFRESH_ENDPOINTS: string[] = [
+  AUTH_ENDPOINTS.AUTH.LOGIN,
+  AUTH_ENDPOINTS.AUTH.GOOGLE_LOGIN,
+  AUTH_ENDPOINTS.AUTH.SIGNUP,
+  AUTH_ENDPOINTS.AUTH.LOGOUT,
+  AUTH_ENDPOINTS.AUTH.REFRESH_TOKEN,
+  AUTH_ENDPOINTS.AUTH.VERIFY_OTP,
+  AUTH_ENDPOINTS.AUTH.RESEND_OTP,
+  AUTH_ENDPOINTS.AUTH.RESEND_FORGOT_PASSWORD_OTP,
+  AUTH_ENDPOINTS.AUTH.FORGOT_PASSWORD,
+  AUTH_ENDPOINTS.AUTH.RESET_PASSWORD_OTP,
+];
 
-function processQueue(error: unknown, token?: string) {
-  failedQueue.forEach((p) => {
-    if (error) {
-      p.reject(error);
-    } else {
-      p.resolve(token!);
-    }
-  });
+function shouldSkipRefresh(url?: string): boolean {
+  if (!url) return true;
+  return SKIP_REFRESH_ENDPOINTS.some((endpoint) => url.includes(endpoint));
+}
 
-  failedQueue = [];
+let refreshPromise: Promise<string> | null = null;
+let sessionExpired = false;
+let isInterceptorsSetup = false;
+
+export function resetInterceptorSessionState(): void {
+  sessionExpired = false;
+  refreshPromise = null;
+}
+
+function getRefreshedToken(): Promise<string> {
+  if (!refreshPromise) {
+    refreshPromise = refreshAccessToken()
+      .then((token) => {
+        sessionExpired = false;
+        return token;
+      })
+      .catch((err) => {
+        if (!sessionExpired) {
+          sessionExpired = true;
+          authStorage.clearSession();
+          authEvents.emit("sessionExpired");
+        }
+        throw err;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+  return refreshPromise;
 }
 
 export function setupInterceptors(): void {
+  if (isInterceptorsSetup) {
+    return;
+  }
+  isInterceptorsSetup = true;
+
+  // Request Interceptor: Attach Authorization Bearer header
   api.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       const token = authStorage.getAccessToken();
 
       if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+        if (typeof config.headers.set === "function") {
+          config.headers.set("Authorization", `Bearer ${token}`);
+        } else {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
       }
 
       return config;
@@ -35,6 +79,7 @@ export function setupInterceptors(): void {
     (error: AxiosError) => Promise.reject(error),
   );
 
+  // Response Interceptor: Automatically handle 401 token refreshes & session expiration
   api.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error: AxiosError) => {
@@ -42,51 +87,35 @@ export function setupInterceptors(): void {
         _retry?: boolean;
       };
 
-      const isAuthRequest = originalRequest?.url?.includes("/auth/");
-
       if (
         error.response?.status !== 401 ||
         !originalRequest ||
         originalRequest._retry ||
-        isAuthRequest
+        shouldSkipRefresh(originalRequest.url)
       ) {
+        return Promise.reject(error);
+      }
+
+      if (sessionExpired) {
         return Promise.reject(error);
       }
 
       originalRequest._retry = true;
 
-      if (isRefreshing) {
-        return new Promise((resolve, reject) => {
-          failedQueue.push({
-            resolve: (token: string) => {
-              if (originalRequest.headers) {
-                originalRequest.headers.Authorization = `Bearer ${token}`;
-              }
-              resolve(api(originalRequest));
-            },
-            reject,
-          });
-        });
-      }
-
-      isRefreshing = true;
-
       try {
-        const accessToken = await refreshAccessToken();
-
-        processQueue(null, accessToken);
+        const accessToken = await getRefreshedToken();
 
         if (originalRequest.headers) {
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          if (typeof originalRequest.headers.set === "function") {
+            originalRequest.headers.set("Authorization", `Bearer ${accessToken}`);
+          } else {
+            originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+          }
         }
 
         return api(originalRequest);
       } catch (err) {
-        processQueue(err);
-        authStorage.clearSession();
         return Promise.reject(err);
-      } finally {
-        isRefreshing = false;
       }
     },
   );

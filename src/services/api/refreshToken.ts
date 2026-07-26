@@ -9,6 +9,8 @@ export async function refreshAccessToken() {
     throw new Error("Refresh token missing");
   }
 
+  delete refreshApi.defaults.headers.common.Authorization;
+
   const response = await refreshApi.post(AUTH_ENDPOINTS.AUTH.REFRESH_TOKEN, {
     refreshToken,
   });
