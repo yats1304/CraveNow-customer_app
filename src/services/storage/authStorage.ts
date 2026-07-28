@@ -1,5 +1,6 @@
 import { STORAGE_KEYS } from "@/constants";
 import { User, AuthPayload } from "@/features/auth/types";
+import { logger } from "@/utils";
 import { storage } from "./storage";
 
 export const authStorage = {
@@ -32,12 +33,21 @@ export const authStorage = {
   },
 
   getUser(): User | null {
-    const value = storage.getString(STORAGE_KEYS.USER);
-    return value ? JSON.parse(value) : null;
+    try {
+      const value = storage.getString(STORAGE_KEYS.USER);
+      return value ? JSON.parse(value) : null;
+    } catch (err) {
+      logger.error("AuthStorage", "Failed to parse user JSON from storage", err);
+      return null;
+    }
   },
 
   setUser(user: User) {
-    storage.set(STORAGE_KEYS.USER, JSON.stringify(user));
+    try {
+      storage.set(STORAGE_KEYS.USER, JSON.stringify(user));
+    } catch (err) {
+      logger.error("AuthStorage", "Failed to serialize user JSON for storage", err);
+    }
   },
 
   removeUser() {
@@ -45,6 +55,7 @@ export const authStorage = {
   },
 
   saveSession(payload: AuthPayload) {
+    logger.info("AuthStorage", "Saving session tokens and user data");
     authStorage.setAccessToken(payload.accessToken);
     authStorage.setRefreshToken(payload.refreshToken);
     authStorage.setUser(payload.user);
@@ -56,6 +67,7 @@ export const authStorage = {
     const user = authStorage.getUser();
 
     if (!accessToken || !refreshToken || !user) {
+      logger.debug("AuthStorage", "Session incomplete or missing in MMKV storage");
       return null;
     }
 
@@ -67,11 +79,13 @@ export const authStorage = {
   },
 
   clearTokens() {
+    logger.info("AuthStorage", "Clearing access and refresh tokens");
     storage.remove(STORAGE_KEYS.ACCESS_TOKEN);
     storage.remove(STORAGE_KEYS.REFRESH_TOKEN);
   },
 
   clearSession() {
+    logger.info("AuthStorage", "Clearing complete auth session from MMKV");
     storage.remove(STORAGE_KEYS.ACCESS_TOKEN);
     storage.remove(STORAGE_KEYS.REFRESH_TOKEN);
     storage.remove(STORAGE_KEYS.USER);

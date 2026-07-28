@@ -1,4 +1,5 @@
 import { appStorage, authStorage } from "@/services/storage";
+import { logger } from "@/utils";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { SPLASH } from "../constants";
@@ -9,12 +10,16 @@ export function useSplash(): void {
     let active = true;
 
     const initializeApp = async () => {
+      logger.info("Splash", "Starting app splash initialization sequence");
       const startTime = Date.now();
       let isValidSession = false;
 
       // 1. Perform background initialization & session validation
       if (authStorage.isAuthenticated()) {
+        logger.info("Splash", "User authenticated in storage, preloading app data");
         isValidSession = await splashService.preloadAppData();
+      } else {
+        logger.info("Splash", "No saved session found in storage");
       }
 
       // 2. Calculate remaining duration to guarantee SPLASH.DURATION visibility
@@ -27,17 +32,20 @@ export function useSplash(): void {
         const isFirst = appStorage.isFirstLaunch();
 
         if (isFirst ?? true) {
+          logger.info("Splash", "First launch detected, navigating to Onboarding");
           router.replace("/(public)/onboarding");
         } else if (isValidSession) {
+          logger.info("Splash", "Valid session confirmed, navigating to Protected area");
           router.replace("/(protected)" as any);
         } else {
+          logger.info("Splash", "No valid session, navigating to Login");
           router.replace("/(auth)/login");
         }
       }, remainingTime);
     };
 
     initializeApp().catch((err) => {
-      console.error("Critical error during app startup initialization:", err);
+      logger.error("Splash", "Critical error during app startup initialization", err);
       if (active) {
         router.replace("/(auth)/login");
       }
