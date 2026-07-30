@@ -16,3 +16,7 @@ export const AUTH_ENDPOINTS = {
     CHANGE_PASSWORD: `${AUTH}/change-password`,
   },
 } as const;
+
+export const HOME_ENDPOINTS = {
+  HOME: "/home",
+};

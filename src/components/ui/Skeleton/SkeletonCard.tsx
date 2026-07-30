@@ -15,7 +15,7 @@ export default function SkeletonCard({
   return (
     <View
       className={cn(
-        "p-4 border border-gray-100 rounded-2xl bg-white w-full gap-4",
+        "p-4 border border-gray-100 dark:border-zinc-800 rounded-2xl bg-white dark:bg-zinc-900 w-full gap-4",
         className
       )}
     >

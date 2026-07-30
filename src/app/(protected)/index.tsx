@@ -20,11 +20,26 @@ export default function ProtectedHomeScreen() {
           Welcome to CraveNow 🎉
         </AppText>
         <AppText variant="body" color="secondary" align="center">
-          {user?.email ? `Logged in as ${user.email}` : "You are successfully authenticated!"}
+          {user?.email
+            ? `Logged in as ${user.email}`
+            : "You are successfully authenticated!"}
         </AppText>
 
-        <Button fullWidth variant="primary" onPress={handleLogout} className="mt-6">
+        <Button
+          fullWidth
+          variant="primary"
+          onPress={handleLogout}
+          className="mt-6"
+        >
           Log Out
+        </Button>
+
+        <Button
+          fullWidth
+          variant="outline"
+          onPress={() => router.push("/home" as any)}
+        >
+          Go to Home
         </Button>
       </View>
     </SafeAreaView>
