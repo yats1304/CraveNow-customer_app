@@ -1,14 +1,17 @@
-import { useCallback } from "react";
-import { RefreshControl, ScrollView, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { router } from "expo-router";
-import { useAuth } from "@/features/auth/hooks/useAuth";
 import Section from "@/components/Section";
 import {
   BannerSkeleton,
   CategorySkeleton,
   RestaurantCardSkeleton,
 } from "@/components/Skeleton";
+import { Theme } from "@/components/theme";
+import { TAB_BAR_CLEARANCE } from "@/constants/layout";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { router } from "expo-router";
+import { useColorScheme } from "nativewind";
+import { useCallback } from "react";
+import { RefreshControl, ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { BannerCarousel } from "../components/BannerCarousel";
 import CategoryList from "../components/CategoryList";
 import CuisineList from "../components/CuisineList";
@@ -22,6 +25,9 @@ export default function HomeScreen() {
   const { user } = useAuth();
   const { data, isLoading, refetch, isRefetching } = useHome();
 
+  const { colorScheme } = useColorScheme();
+  const theme = colorScheme === "dark" ? Theme.dark : Theme.light;
+
   const handleAddressPress = useCallback(() => {
     router.push("/(protected)" as any);
   }, []);
@@ -31,7 +37,7 @@ export default function HomeScreen() {
   }, []);
 
   const handleSearchPress = useCallback(() => {
-    router.push("/(protected)" as any);
+    router.navigate("/(protected)/search");
   }, []);
 
   const handleSeeAllRestaurants = useCallback(() => {
@@ -40,7 +46,10 @@ export default function HomeScreen() {
 
   if (isLoading || !data) {
     return (
-      <SafeAreaView className="flex-1 bg-neutral-50 dark:bg-zinc-950">
+      <SafeAreaView
+        className="flex-1"
+        style={{ backgroundColor: theme.background }}
+      >
         <HomeHeader
           userName={user?.name || "Foodie"}
           address="Detecting location..."
@@ -59,11 +68,20 @@ export default function HomeScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-neutral-50 dark:bg-zinc-950">
+    <SafeAreaView
+      className="flex-1"
+      style={{ backgroundColor: theme.background }}
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: TAB_BAR_CLEARANCE }}
         refreshControl={
-          <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={refetch}
+            tintColor={theme.brandPrimary}
+            colors={[theme.brandPrimary]}
+          />
         }
       >
         <HomeHeader

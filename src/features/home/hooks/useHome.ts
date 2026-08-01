@@ -5,6 +5,6 @@ export const useHome = () => {
   return useQuery({
     queryKey: ["home"],
     queryFn: () => homeService.getHomeData(),
-    staleTime: 1000 * 60 * 5, // 5 minutes stale time
+    staleTime: 1000 * 60 * 5,
   });
 };

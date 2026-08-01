@@ -1,10 +1,10 @@
 import { Colors } from "@/components/theme";
 import { AppText, Button, Input } from "@/components/ui";
+import { getOrCreateDeviceId } from "@/utils/device";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { Pressable, View } from "react-native";
-import { getOrCreateDeviceId } from "@/utils/device";
 import { useLogin } from "../hooks";
 import { loginSchema } from "../schemas";
 
@@ -38,7 +38,7 @@ export function LoginForm({
     loginMutation.mutate(data, {
       onSuccess: () => {
         onSuccess?.();
-        router.replace("/(protected)" as any);
+        router.replace("/(protected)/home" as any);
       },
       onError: (error) => {
         onError?.(error);

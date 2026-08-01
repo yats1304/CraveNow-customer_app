@@ -1,5 +1,6 @@
+import BottomTabBar from "@/components/BottomTabBar";
 import { useAuth } from "@/features/auth";
-import { Redirect, Slot } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 
 export default function ProtectedLayout() {
   const { isAuthenticated } = useAuth();
@@ -8,5 +9,47 @@ export default function ProtectedLayout() {
     return <Redirect href={"/(auth)/welcome"} />;
   }
 
-  return <Slot />;
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+      }}
+      tabBar={(props) => <BottomTabBar {...props} />}
+    >
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: "Home",
+        }}
+      />
+
+      <Tabs.Screen
+        name="search"
+        options={{
+          title: "Search",
+        }}
+      />
+
+      <Tabs.Screen
+        name="cart"
+        options={{
+          title: "Cart",
+        }}
+      />
+
+      <Tabs.Screen
+        name="orders"
+        options={{
+          title: "Orders",
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+        }}
+      />
+    </Tabs>
+  );
 }

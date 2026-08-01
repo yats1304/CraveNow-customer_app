@@ -1,4 +1,4 @@
-import { Colors } from "@/components/theme";
+import { Theme } from "@/components/theme";
 import AppText from "@/components/ui/Text/AppText";
 import { Bell, ChevronDown, MapPin } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
@@ -22,10 +22,7 @@ const HomeHeader = ({
   onNotificationPress,
 }: HomeHeaderProps) => {
   const { colorScheme } = useColorScheme();
-  const isDark = colorScheme === "dark";
-
-  const iconColor = isDark ? "#FAFAFA" : "#18181B";
-  const primaryBrandColor = Colors?.primary?.[500] || "#E44A25";
+  const theme = colorScheme === "dark" ? Theme.dark : Theme.light;
 
   return (
     <View className="flex-col gap-y-3 px-4 pt-3 pb-2">
@@ -48,7 +45,7 @@ const HomeHeader = ({
           </View>
 
           <View className="flex-row items-center gap-x-1.5">
-            <MapPin size={18} color={primaryBrandColor} />
+            <MapPin size={18} color={theme.brandPrimary} />
 
             <AppText
               variant="body"
@@ -59,19 +56,23 @@ const HomeHeader = ({
               {address || "Select Location"}
             </AppText>
 
-            <ChevronDown size={18} color={primaryBrandColor} />
+            <ChevronDown size={18} color={theme.brandPrimary} />
           </View>
         </Pressable>
 
         {/* Notification Bell Button */}
         <Pressable
           onPress={onNotificationPress}
-          className="relative w-10 h-10 rounded-full bg-neutral-100 dark:bg-zinc-800/80 items-center justify-center border border-neutral-200/60 dark:border-zinc-700/60 shadow-sm active:opacity-70"
+          className="relative w-10 h-10 rounded-full items-center justify-center border shadow-sm active:opacity-70"
+          style={{ backgroundColor: theme.surface, borderColor: theme.border }}
           hitSlop={8}
         >
-          <Bell size={20} color={iconColor} />
+          <Bell size={20} color={theme.textPrimary} />
           {/* Notification Dot */}
-          <View className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-amber-500" />
+          <View
+            className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full"
+            style={{ backgroundColor: theme.brandPrimary }}
+          />
         </Pressable>
       </View>
 

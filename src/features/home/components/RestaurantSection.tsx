@@ -1,14 +1,23 @@
+import { Theme } from "@/components/theme";
 import AppText from "@/components/ui/Text/AppText";
 import { Clock, Star } from "lucide-react-native";
+import { useColorScheme } from "nativewind";
 import { memo } from "react";
 import { Image, Pressable, View } from "react-native";
 import { Restaurant } from "../types/home.types";
 
 interface RestaurantSectionProps {
   restaurants?: Restaurant[];
+  onPress?: (restaurant: Restaurant) => void;
 }
 
-const RestaurantSection = ({ restaurants = [] }: RestaurantSectionProps) => {
+const RestaurantSection = ({
+  restaurants = [],
+  onPress,
+}: RestaurantSectionProps) => {
+  const { colorScheme } = useColorScheme();
+  const theme = colorScheme === "dark" ? Theme.dark : Theme.light;
+
   if (!restaurants.length) return null;
 
   return (
@@ -16,10 +25,18 @@ const RestaurantSection = ({ restaurants = [] }: RestaurantSectionProps) => {
       {restaurants.map((restaurant) => (
         <Pressable
           key={restaurant._id}
-          className="bg-white dark:bg-zinc-900 border border-neutral-200/60 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-xs active:opacity-85"
+          onPress={() => onPress?.(restaurant)}
+          className="rounded-2xl overflow-hidden active:opacity-85"
+          style={{
+            backgroundColor: theme.surface,
+            borderWidth: 1,
+            borderColor: theme.border,
+          }}
         >
-          {/* Banner Image */}
-          <View className="h-40 w-full bg-neutral-200 dark:bg-zinc-800">
+          <View
+            className="h-40 w-full"
+            style={{ backgroundColor: theme.brandSubtle }}
+          >
             {restaurant.banner?.url ? (
               <Image
                 source={{ uri: restaurant.banner.url }}
@@ -29,22 +46,26 @@ const RestaurantSection = ({ restaurants = [] }: RestaurantSectionProps) => {
             ) : null}
           </View>
 
-          {/* Info Container */}
           <View className="p-3">
             <View className="flex-row items-center justify-between">
               <AppText
                 variant="body"
                 weight="700"
-                className="text-base text-neutral-900 dark:text-white flex-1 mr-2"
+                className="text-base flex-1 mr-2"
+                style={{ color: theme.textPrimary }}
               >
                 {restaurant.name}
               </AppText>
-              <View className="flex-row items-center gap-x-1 px-2 py-0.5 rounded-lg bg-green-500/10">
-                <Star size={14} color="#22C55E" fill="#22C55E" />
+
+              <View
+                className="flex-row items-center gap-x-1 px-2 py-0.5 rounded-lg"
+                style={{ backgroundColor: theme.successBg }}
+              >
+                <Star size={14} color={theme.success} fill={theme.success} />
                 <AppText
                   variant="caption"
                   weight="700"
-                  className="text-green-600 dark:text-green-400"
+                  style={{ color: theme.success }}
                 >
                   {restaurant.averageRating || "4.5"}
                 </AppText>
@@ -53,12 +74,16 @@ const RestaurantSection = ({ restaurants = [] }: RestaurantSectionProps) => {
 
             <View className="flex-row items-center gap-x-4 mt-2">
               <View className="flex-row items-center gap-x-1">
-                <Clock size={14} color="#71717A" />
-                <AppText variant="caption" color="muted">
+                <Clock size={14} color={theme.iconDefault} />
+                <AppText
+                  variant="caption"
+                  style={{ color: theme.textSecondary }}
+                >
                   {restaurant.averagePreparationTime} mins
                 </AppText>
               </View>
-              <AppText variant="caption" color="muted">
+
+              <AppText variant="caption" style={{ color: theme.textSecondary }}>
                 Min ₹{restaurant.minimumOrderAmount}
               </AppText>
             </View>

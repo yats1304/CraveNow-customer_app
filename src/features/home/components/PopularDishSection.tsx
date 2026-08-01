@@ -1,13 +1,24 @@
+import { Theme } from "@/components/theme";
 import AppText from "@/components/ui/Text/AppText";
+import { useColorScheme } from "nativewind";
 import { memo } from "react";
 import { Image, Pressable, ScrollView, View } from "react-native";
 import { FeaturedMenuItem } from "../types/home.types";
 
 interface PopularDishSectionProps {
   items?: FeaturedMenuItem[];
+  onAdd?: (item: FeaturedMenuItem) => void;
+  onPress?: (item: FeaturedMenuItem) => void;
 }
 
-const PopularDishSection = ({ items = [] }: PopularDishSectionProps) => {
+const PopularDishSection = ({
+  items = [],
+  onAdd,
+  onPress,
+}: PopularDishSectionProps) => {
+  const { colorScheme } = useColorScheme();
+  const theme = colorScheme === "dark" ? Theme.dark : Theme.light;
+
   if (!items.length) return null;
 
   return (
@@ -20,9 +31,18 @@ const PopularDishSection = ({ items = [] }: PopularDishSectionProps) => {
         {items.map((item) => (
           <Pressable
             key={item._id}
-            className="w-44 bg-white dark:bg-zinc-900 border border-neutral-200/60 dark:border-zinc-800 rounded-2xl overflow-hidden p-2.5 shadow-xs active:opacity-85"
+            onPress={() => onPress?.(item)}
+            className="w-44 rounded-2xl overflow-hidden p-2.5 active:opacity-85"
+            style={{
+              backgroundColor: theme.surface,
+              borderWidth: 1,
+              borderColor: theme.border,
+            }}
           >
-            <View className="w-full h-32 rounded-xl overflow-hidden bg-neutral-100 dark:bg-zinc-800 mb-2">
+            <View
+              className="w-full h-32 rounded-xl overflow-hidden mb-2"
+              style={{ backgroundColor: theme.brandSubtle }}
+            >
               {item.images?.[0]?.url ? (
                 <Image
                   source={{ uri: item.images[0].url }}
@@ -36,7 +56,7 @@ const PopularDishSection = ({ items = [] }: PopularDishSectionProps) => {
               variant="bodySmall"
               weight="700"
               numberOfLines={1}
-              className="text-neutral-900 dark:text-white"
+              style={{ color: theme.textPrimary }}
             >
               {item.name}
             </AppText>
@@ -45,19 +65,31 @@ const PopularDishSection = ({ items = [] }: PopularDishSectionProps) => {
               <AppText
                 variant="body"
                 weight="700"
-                className="text-orange-600 dark:text-orange-500"
+                style={{ color: theme.textPrimary }}
               >
                 ₹{item.price}
               </AppText>
-              <View className="px-2.5 py-1 rounded-lg bg-orange-500">
+
+              <Pressable
+                onPress={(e) => {
+                  e.stopPropagation();
+                  onAdd?.(item);
+                }}
+                className="px-2.5 py-1 rounded-lg active:opacity-75"
+                style={{ backgroundColor: theme.brandPrimary }}
+                hitSlop={6}
+              >
                 <AppText
                   variant="caption"
                   weight="700"
-                  className="text-white text-xs"
+                  style={{
+                    color: theme.iconOnBrand,
+                    fontSize: 12,
+                  }}
                 >
                   ADD
                 </AppText>
-              </View>
+              </Pressable>
             </View>
           </Pressable>
         ))}

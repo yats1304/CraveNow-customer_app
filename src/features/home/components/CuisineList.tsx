@@ -1,14 +1,26 @@
+import { Theme } from "@/components/theme";
 import AppText from "@/components/ui/Text/AppText";
-import { memo } from "react";
+import { useColorScheme } from "nativewind";
+import { memo, useState } from "react";
 import { Image, Pressable, ScrollView, View } from "react-native";
 import { Cuisine } from "../types/home.types";
 
 interface CuisineListProps {
   cuisines?: Cuisine[];
+  onSelect?: (id: string) => void;
 }
 
-const CuisineList = ({ cuisines = [] }: CuisineListProps) => {
+const CuisineList = ({ cuisines = [], onSelect }: CuisineListProps) => {
+  const { colorScheme } = useColorScheme();
+  const theme = colorScheme === "dark" ? Theme.dark : Theme.light;
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
   if (!cuisines.length) return null;
+
+  const handlePress = (id: string) => {
+    setSelectedId((prev) => (prev === id ? null : id));
+    onSelect?.(id);
+  };
 
   return (
     <ScrollView
@@ -17,31 +29,50 @@ const CuisineList = ({ cuisines = [] }: CuisineListProps) => {
       contentContainerStyle={{ paddingHorizontal: 16 }}
     >
       <View className="flex-row items-center gap-x-4">
-        {cuisines.map((cuisine) => (
-          <Pressable
-            key={cuisine._id}
-            className="flex-col items-center gap-y-1.5 active:opacity-70"
-          >
-            <View className="w-16 h-16 rounded-full overflow-hidden bg-neutral-200 dark:bg-zinc-800 border border-neutral-200/60 dark:border-zinc-700/60 items-center justify-center">
-              {cuisine.image?.url ? (
-                <Image
-                  source={{ uri: cuisine.image.url }}
-                  className="w-full h-full"
-                  resizeMode="cover"
-                />
-              ) : (
-                <View className="w-full h-full bg-orange-100 dark:bg-orange-950/40" />
-              )}
-            </View>
-            <AppText
-              variant="caption"
-              weight="600"
-              className="text-xs text-neutral-800 dark:text-zinc-200"
+        {cuisines.map((cuisine) => {
+          const isSelected = selectedId === cuisine._id;
+
+          return (
+            <Pressable
+              key={cuisine._id}
+              onPress={() => handlePress(cuisine._id)}
+              className="flex-col items-center gap-y-1.5 active:opacity-70"
             >
-              {cuisine.name}
-            </AppText>
-          </Pressable>
-        ))}
+              <View
+                className="w-16 h-16 rounded-full overflow-hidden items-center justify-center"
+                style={{
+                  borderWidth: isSelected ? 2 : 1,
+                  borderColor: isSelected ? theme.brandPrimary : theme.border,
+                  backgroundColor: theme.surface,
+                }}
+              >
+                {cuisine.image?.url ? (
+                  <Image
+                    source={{ uri: cuisine.image.url }}
+                    className="w-full h-full"
+                    resizeMode="cover"
+                  />
+                ) : (
+                  <View
+                    className="w-full h-full"
+                    style={{ backgroundColor: theme.brandSubtle }}
+                  />
+                )}
+              </View>
+
+              <AppText
+                variant="caption"
+                weight={isSelected ? "700" : "600"}
+                style={{
+                  color: isSelected ? theme.brandPrimary : theme.textPrimary,
+                  fontSize: 12,
+                }}
+              >
+                {cuisine.name}
+              </AppText>
+            </Pressable>
+          );
+        })}
       </View>
     </ScrollView>
   );

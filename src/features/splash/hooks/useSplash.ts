@@ -16,7 +16,10 @@ export function useSplash(): void {
 
       // 1. Perform background initialization & session validation
       if (authStorage.isAuthenticated()) {
-        logger.info("Splash", "User authenticated in storage, preloading app data");
+        logger.info(
+          "Splash",
+          "User authenticated in storage, preloading app data",
+        );
         isValidSession = await splashService.preloadAppData();
       } else {
         logger.info("Splash", "No saved session found in storage");
@@ -32,11 +35,17 @@ export function useSplash(): void {
         const isFirst = appStorage.isFirstLaunch();
 
         if (isFirst ?? true) {
-          logger.info("Splash", "First launch detected, navigating to Onboarding");
+          logger.info(
+            "Splash",
+            "First launch detected, navigating to Onboarding",
+          );
           router.replace("/(public)/onboarding");
         } else if (isValidSession) {
-          logger.info("Splash", "Valid session confirmed, navigating to Protected area");
-          router.replace("/(protected)" as any);
+          logger.info(
+            "Splash",
+            "Valid session confirmed, navigating to Protected area",
+          );
+          router.replace("/(protected)/home" as any);
         } else {
           logger.info("Splash", "No valid session, navigating to Login");
           router.replace("/(auth)/login");
@@ -45,7 +54,11 @@ export function useSplash(): void {
     };
 
     initializeApp().catch((err) => {
-      logger.error("Splash", "Critical error during app startup initialization", err);
+      logger.error(
+        "Splash",
+        "Critical error during app startup initialization",
+        err,
+      );
       if (active) {
         router.replace("/(auth)/login");
       }
