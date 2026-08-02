@@ -5,7 +5,7 @@ import {
   RestaurantCardSkeleton,
 } from "@/components/Skeleton";
 import { Theme } from "@/components/theme";
-import { TAB_BAR_CLEARANCE } from "@/constants/layout";
+import { TAB_BAR_CLEARANCE } from "@/constants/tab";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 import { router } from "expo-router";
 import { useColorScheme } from "nativewind";

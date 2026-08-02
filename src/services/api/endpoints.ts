@@ -20,3 +20,7 @@ export const AUTH_ENDPOINTS = {
 export const HOME_ENDPOINTS = {
   HOME: "/home",
 };
+
+export const SEARCH_ENDPOINT = {
+  SEARCH: "/restaurant",
+};

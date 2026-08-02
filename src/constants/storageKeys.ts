@@ -6,4 +6,5 @@ export const STORAGE_KEYS = {
   FIRST_LAUNCH: "first_launch",
   THEME: "theme",
   LANGUAGE: "language",
+  RECENT_SEARCHES_KEY: "recent_searches",
 } as const;

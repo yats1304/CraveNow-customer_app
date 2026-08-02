@@ -1,11 +1,5 @@
-import { Text, View } from "react-native";
+import SearchScreen from "@/features/search/screens/SearchScreen";
 
-const search = () => {
-  return (
-    <View>
-      <Text>search</Text>
-    </View>
-  );
-};
-
-export default search;
+export default function Search() {
+  return <SearchScreen />;
+}

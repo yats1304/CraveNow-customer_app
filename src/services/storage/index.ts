@@ -1,3 +1,4 @@
-export * from "./appStorage";
-export * from "./authStorage";
+export * from "./app.storage";
+export * from "./auth.storage";
+export * from "./search.storage";
 export * from "./storage";

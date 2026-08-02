@@ -14,7 +14,7 @@ export interface Restaurant extends BaseEntity {
   banner?: ImageAsset | string;
   primaryAddressId?: string | null;
   restaurantType?: RestaurantType;
-  cuisineIds?: string[];
+  cuisines?: { _id: string; name: string }[];
   gstNumber?: string;
   fssaiLicenseNumber?: string;
   minimumOrderAmount?: number;

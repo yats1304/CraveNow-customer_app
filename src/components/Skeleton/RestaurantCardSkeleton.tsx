@@ -1,3 +1,5 @@
+import { Theme } from "@/components/theme";
+import { useColorScheme } from "nativewind";
 import { memo } from "react";
 import { View } from "react-native";
 import Skeleton from "./Skeleton";
@@ -6,9 +8,21 @@ export interface RestaurantCardSkeletonProps {
   className?: string;
 }
 
-const RestaurantCardSkeleton = ({ className = "" }: RestaurantCardSkeletonProps) => {
+const RestaurantCardSkeleton = ({
+  className = "",
+}: RestaurantCardSkeletonProps) => {
+  const { colorScheme } = useColorScheme();
+  const theme = colorScheme === "dark" ? Theme.dark : Theme.light;
+
   return (
-    <View className={`bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800/80 rounded-2xl p-3 mb-4 shadow-xs ${className}`}>
+    <View
+      className={`rounded-2xl p-3 mb-4 ${className}`}
+      style={{
+        backgroundColor: theme.surface,
+        borderWidth: 1,
+        borderColor: theme.border,
+      }}
+    >
       {/* Restaurant Cover Image */}
       <Skeleton width="100%" height={160} radius={16} />
 
