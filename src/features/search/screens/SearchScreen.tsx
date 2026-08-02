@@ -53,6 +53,12 @@ const SearchScreen = () => {
     [saveRecentSearch],
   );
 
+  const handleSubmitSearch = useCallback(() => {
+    if (query.trim()) {
+      saveRecentSearch(query.trim());
+    }
+  }, [query, saveRecentSearch]);
+
   const handleRestaurantPress = useCallback(
     (restaurant: Restaurant) => {
       saveRecentSearch(query);
@@ -82,6 +88,7 @@ const SearchScreen = () => {
         onChangeText={setQuery}
         onBackPress={handleBackPress}
         onClearPress={handleClearSearch}
+        onSubmitEditing={handleSubmitSearch}
       />
 
       {query.trim().length === 0 ? (

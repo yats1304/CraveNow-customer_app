@@ -1,9 +1,8 @@
+import { Theme } from "@/components/theme";
 import { Clock3, X } from "lucide-react-native";
 import { useColorScheme } from "nativewind";
 import { memo } from "react";
 import { Pressable, Text, View } from "react-native";
-
-import { Theme } from "@/components/theme";
 import { RecentSearchItemProps } from "./types";
 
 const RecentSearchItem = ({

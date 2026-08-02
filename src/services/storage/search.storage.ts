@@ -45,6 +45,7 @@ export const searchStorage = {
       STORAGE_KEYS.RECENT_SEARCHES_KEY,
       JSON.stringify(updatedSearches),
     );
+    console.log("saved:", updatedSearches);
   },
 
   removeRecentSearch(search: string): void {

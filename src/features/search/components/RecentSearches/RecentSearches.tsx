@@ -1,8 +1,6 @@
+import SectionHeader from "@/components/SectionHeader";
 import { memo } from "react";
 import { FlatList, View } from "react-native";
-
-import SectionHeader from "@/components/SectionHeader";
-
 import RecentSearchItem from "./RecentSearchItem";
 import { RecentSearchesProps } from "./types";
 

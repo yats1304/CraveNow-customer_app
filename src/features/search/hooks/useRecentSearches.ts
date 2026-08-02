@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-
 import { searchStorage } from "@/services/storage";
 import { RecentSearch } from "@/types";
+import { useCallback, useEffect, useState } from "react";
 
 export const useRecentSearches = () => {
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
